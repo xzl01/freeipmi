@@ -1,0 +1,5 @@
+usr/include/freeipmi
+usr/lib/libfreeipmi.a
+usr/lib/libfreeipmi.so
+usr/lib/pkgconfig/libfreeipmi.pc usr/lib/${DEB_HOST_MULTIARCH}/pkgconfig
+usr/share/man/man3/libfreeipmi.3

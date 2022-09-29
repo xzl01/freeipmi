@@ -1,0 +1,4 @@
+sysconfig-to-default-in-service.patch
+Honour-SOURCE_DATE_EPOCH.patch
+fix-systemd-service-files-permission.patch
+libfreeipmi-ipmi-sensor-read.c-Incorrect-sensor-read.patch

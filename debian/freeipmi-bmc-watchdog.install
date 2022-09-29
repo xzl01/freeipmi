@@ -1,0 +1,4 @@
+etc/sysconfig/bmc-watchdog etc/default/
+lib/systemd/system/bmc-watchdog.service
+usr/sbin/bmc-watchdog
+usr/share/man/man8/bmc-watchdog.8

@@ -1,0 +1,4 @@
+etc/freeipmi/libipmiconsole.conf
+usr/lib/libipmiconsole.so.?
+usr/lib/libipmiconsole.so.?.*.*
+usr/share/man/man5/libipmiconsole.conf.5

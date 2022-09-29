@@ -1,0 +1,17 @@
+Description: /etc/sysconfig to /etc/default in service
+ Replace /etc/sysconfig to /etc/default in bmc-watchdog.service,
+ done with this patch as it is hardcoded upstream.
+Author: Fabio Fantoni <fantonifabio@tiscali.it>
+Forwarded: not-needed
+
+--- a/etc/bmc-watchdog.service
++++ b/etc/bmc-watchdog.service
+@@ -5,7 +5,7 @@
+ [Service]
+ Type=forking
+ PIDFile=/run/bmc-watchdog.pid
+-EnvironmentFile=-/etc/sysconfig/bmc-watchdog
++EnvironmentFile=-/etc/default/bmc-watchdog
+ ExecStart=/usr/sbin/bmc-watchdog $OPTIONS
+ 
+ [Install]
