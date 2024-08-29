@@ -1,3 +1,57 @@
+FreeIPMI 1.6.13 - 01/26/24
+--------------------------
+o Fix build issues on systems where inb/outb are declared with inline
+  assembly.
+o Add additional sensor/event interpretations.
+
+FreeIPMI 1.6.12 - 11/19/23
+--------------------------
+o Use poll() over select() to avoid fd limit in openipmi driver.
+o Fix potential portability problems on systems without cbrt().
+o Minor documentation updates.
+
+FreeIPMI 1.6.11 - 06/07/23
+--------------------------
+o Fix double free corner case in ipmiseld.
+o Support ISO 8601 date inputs to date range options in ipmi-sel.
+o Support Xilinx OEM FRU records.
+o Fix corner case in libipmimonitoring, support sensor if units is
+  "RPM per minute", but just return "RPM" as the units.
+o Fix portability compilation on cygwin.
+o Fix typo in fiid template field that could lead to packet
+  interpretation errors.
+
+FreeIPMI 1.6.10 - 08/30/22
+--------------------------
+o Support IPv6 Lan configuration in ipmi-config.  IPv6 configuration
+  is supported in the new Lan6_Conf section.
+o Fix static compilation issues by renaming a number of internal
+  functions.
+o Misc documentation corrections.
+
+FreeIPMI 1.6.9 - 01/19/22
+-------------------------
+o Support --with-systemconfigdir build option.
+o Fix build issue on musl where putmsg/getmsg are not available.
+o Fix build issue when inb/outb are not available on some systems.
+o Fix static build issues with gcrypt.
+o Add conserver documentation in faq.
+o Minor documentation updates.
+
+FreeIPMI 1.6.8 - 05/19/21
+-------------------------
+o Fix incorrect sensor read corner case on BMCs that use non-default
+  LUNs (LP#1926299).
+o Remove hard coded paths from system config files (i.e. mostly files
+  in /etc).  Have paths updated based on options to configure.
+
+FreeIPMI 1.6.7 - 02/12/21
+-------------------------
+o Do not require IPMI access when running ipmi-fru with the --fru-file
+  option.
+o Fix default permissions of various config and system files.
+o Minor documentation updates.
+
 FreeIPMI 1.6.6 - 09/04/20
 -------------------------
 o In libfreeipmi, fix segfault in SPMI parsing leading to immediate

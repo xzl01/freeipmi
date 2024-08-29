@@ -19,7 +19,9 @@ will let you \fI\-\-checkout\fR or \fI\-\-commit\fR only the
 \fIcore\fR IPMI values necessary for IPMI configuration.  For
 additional advanced configuration fields related to Chassis
 configuration (including boot options), Platform Event Filtering
-(PEF), or Sensors, see the \fI\-\-category\fR option below.
+(PEF), or Sensors, see the \fI\-\-category\fR option below.  For
+more details on \fIcore\fR IPMI configuration, see
+.B ipmi-config.conf(5).
 
 The majority of
 configuration operations require ADMIN privilege when using
@@ -57,7 +59,7 @@ Specify the category or categories of configuration data to configure.
 Currently available choices: \fIcore\fR, \fIchassis\fR, \fIsensors\fR,
 \fIpef\fR, \fIdcmi\fR.  Multiple categories can be separated by comma.
 \fIcore\fR includes all major IPMI configuration necessary to get IPMI
-to function on a sytem, such as configuration for users, passwords,
+to function on a system, such as configuration for users, passwords,
 authentication, networking, and serial-over-lan (SOL).  \fIchassis\fR
 includes all chassis relevant configuration including boot options,
 front panel buttons, and power behavior.  \fIdcmi\fR includes
@@ -98,10 +100,11 @@ increased.
 Output verbose information.  When used with \fI\-\-checkout\fR,
 additional uncommon sections and/or fields will be shown.  In the
 \fIcore\fR category, this includes checking out Serial Configuration
-parameters, Vlan parameters, IPv4 Header parameters, RMCP port, and
-sections for each channel on a system, if multiple channels exist.  In
-the \fIpef\fR category, this includes checkout out sections for each
-channel on a system, if multiple channels exist.
+parameters, Vlan parameters, IPv4 Header parameters, RMCP port, all
+IPv6 configurable addresses (if > 1 is supported), and sections for
+each channel on a system (if multiple channels exist).  In the
+\fIpef\fR category, this includes checkout out sections for each
+channel on a system (if multiple channels exist).
 .TP
 \fB\-vv\fR
 Output very verbose information.  Output additional detailed
@@ -153,7 +156,7 @@ reboots, some configuration values may have changed.  The user may
 wish to run configuration tools on each boot to ensure configuration
 values remain.
 .LP
-Comments will be listed on occassion in checked out files with information
+Comments will be listed on occasion in checked out files with information
 on how to configure fields.
 The
 .B ipmi-config.conf(5)
@@ -246,7 +249,7 @@ accomplished through a cold-reset.  A cold-reset can be executed via
 
 .SH "CHASSIS SPECIAL CASE CONFIGURATION INFORMATION"
 The
-.B Chassis_Front_Panel_Buttons:Enable_Standby_Button_For_Entering_Standy,
+.B Chassis_Front_Panel_Buttons:Enable_Standby_Button_For_Entering_Standby,
 .B Chassis_Front_Panel_Buttons:Enable_Diagnostic_Interrupt_Button
 .B Chassis_Front_Panel_Buttons:Enable_Reset_Button,
 and
@@ -319,7 +322,8 @@ written to the BMC.  Issue observed on Supermicro H8QME.
 BMC by sleeping one second between the commit of every key.  It works
 around motherboards that have BMCs that can be overwhelmed by commits.
 Those hitting this issue may see commit errors or commits not being
-written to the BMC.  Issue observed on Quanta S99Q/Dell FS12-TY.
+written to the BMC.  Issue observed on Quanta S99Q/Dell FS12-TY and
+Dell PowerEdge T320.
 .LP
 \fIsolchannelassumelanchannel\fR - This workaround will force
 .B ipmi-config

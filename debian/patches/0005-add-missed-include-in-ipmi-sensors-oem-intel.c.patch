@@ -1,0 +1,20 @@
+From: Fabio Fantoni <fantonifabio@tiscali.it>
+Date: Mon, 25 Mar 2024 21:13:31 +0100
+Subject: add missed include in ipmi-sensors-oem-intel.c
+
+---
+ ipmi-sensors/ipmi-sensors-oem-intel.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/ipmi-sensors/ipmi-sensors-oem-intel.c b/ipmi-sensors/ipmi-sensors-oem-intel.c
+index 5e0f373..3fc022e 100644
+--- a/ipmi-sensors/ipmi-sensors-oem-intel.c
++++ b/ipmi-sensors/ipmi-sensors-oem-intel.c
+@@ -34,6 +34,7 @@
+ #include "ipmi-sensors-oem-intel.h"
+ #include "ipmi-sensors-oem-intel-s5500wb.h"
+ #include "ipmi-sensors-oem-intel-s2600jf.h"
++#include "ipmi-sensors-oem-intel-s2600wp.h"
+ #include "ipmi-sensors-oem-intel-quanta-qssc-s4r.h"
+ #include "ipmi-sensors-oem-intel-node-manager.h"
+ 

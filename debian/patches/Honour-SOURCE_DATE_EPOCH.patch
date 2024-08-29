@@ -1,13 +1,21 @@
-Description: Honour SOURCE_DATE_EPOCH in manpages
- Replace man pages dates with the timestamp from the latest
- debian/changelog entry using the variable SOURCE_DATE_EPOCH to make the
- package build reproducibly.
-Author: Eduard Sanou <dhole@openmailbox.org>
-Forwarded: not-needed
+From: Eduard Sanou <dhole@openmailbox.org>
+Date: Thu, 3 Oct 2019 12:48:25 +0200
+Subject: Honour SOURCE_DATE_EPOCH in manpages
 
+Replace man pages dates with the timestamp from the latest
+debian/changelog entry using the variable SOURCE_DATE_EPOCH to make the
+package build reproducibly.
+
+Forwarded: not-needed
+---
+ configure.ac | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index 0bd4f65..f938716 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -106,7 +106,11 @@
+@@ -117,7 +117,11 @@ AC_CONFIG_FILES([
  	man/rmcpping.8.pre
          rmcpping/Makefile])
  

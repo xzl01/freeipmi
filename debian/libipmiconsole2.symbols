@@ -1,4 +1,5 @@
 libipmiconsole.so.2 libipmiconsole2 #MINVER#
+* Build-Depends-Package: libipmiconsole-dev
  ipmiconsole_cipher_suite_id_is_valid@Base 1.1.5
  ipmiconsole_ctx_create@Base 1.1.5
  ipmiconsole_ctx_destroy@Base 1.1.5

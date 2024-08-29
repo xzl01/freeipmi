@@ -1,4 +1,5 @@
 libipmidetect.so.0 libipmidetect0 #MINVER#
+* Build-Depends-Package: libipmidetect-dev
  ipmidetect_errnum@Base 1.1.5
  ipmidetect_errormsg@Base 1.1.5
  ipmidetect_get_detected_nodes_string@Base 1.1.5

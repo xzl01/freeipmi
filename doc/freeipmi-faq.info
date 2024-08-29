@@ -1,7 +1,7 @@
-This is freeipmi-faq.info, produced by makeinfo version 5.1 from
+This is freeipmi-faq.info, produced by makeinfo version 6.5 from
 freeipmi-faq.texi.
 
-This manual is for FreeIPMI (version 1.6.6, 28 January 2020).  Copyright
+This manual is for FreeIPMI (version 1.6.13, 5 June 2023).  Copyright
 (C) 2006-2012 FreeIPMI Core Team
 
      Permission is granted to copy, distribute and/or modify this
@@ -21,8 +21,8 @@ File: freeipmi-faq.info,  Node: Top,  Next: What is IPMI?,  Prev: (dir),  Up: (d
 
 Frequently Asked Questions on *FreeIPMI*
 
-   This edition of the documentation was last updated on September 4,
-2020 for release 1.6.6 of the FreeIPMI.
+   This edition of the documentation was last updated on January 26,
+2024 for release 1.6.13 of the FreeIPMI.
 
 * Menu:
 
@@ -44,6 +44,7 @@ Frequently Asked Questions on *FreeIPMI*
 * SSIF Driver Configuration::
 * How do you setup Powerman with ipmipower?::
 * How do you setup Conman with ipmiconsole or libipmiconsole?::
+* How do you setup Conserver with libipmiconsole?::
 * How do you setup Ganglia or Nagios to monitor IPMI sensors via FreeIPMI?::
 * Why are times reported by FreeIPMI tools wrong?::
 * Why is the IPMI kernel driver faster than the KCS driver?::
@@ -451,7 +452,7 @@ you might want to know.
 
 *FRU*
 
-     The *Field Replaceable Unit* is a general computing term refering
+     The *Field Replaceable Unit* is a general computing term referring
      to a replaceable unit of electronics.  In IPMI it is common to
      refer to the "FRU" as the database of all FRU components on a
      system.  In FreeIPMI, 'ipmi-fru' can be used to read the FRU
@@ -678,7 +679,7 @@ have completed.  Users may wish to configure 'ipmipower' with
 'ipmipower-serial.dev' device file instead of 'ipmipower.dev'.
 
 
-File: freeipmi-faq.info,  Node: How do you setup Conman with ipmiconsole or libipmiconsole?,  Next: How do you setup Ganglia or Nagios to monitor IPMI sensors via FreeIPMI?,  Prev: How do you setup Powerman with ipmipower?,  Up: Top
+File: freeipmi-faq.info,  Node: How do you setup Conman with ipmiconsole or libipmiconsole?,  Next: How do you setup Conserver with libipmiconsole?,  Prev: How do you setup Powerman with ipmipower?,  Up: Top
 
 18 How do you setup Conman with ipmiconsole or libipmiconsole?
 ==============================================================
@@ -721,9 +722,37 @@ libipmiconsole library natively is that Conman is able to detect and
 manage additional IPMI error cases.
 
 
+File: freeipmi-faq.info,  Node: How do you setup Conserver with libipmiconsole?,  Next: How do you setup Ganglia or Nagios to monitor IPMI sensors via FreeIPMI?,  Prev: How do you setup Conman with ipmiconsole or libipmiconsole?,  Up: Top
+
+19 How do you setup Conserver with libipmiconsole?
+==================================================
+
+You can find more details in the conserver.cf
+(<https://www.conserver.com/docs/conserver.cf.man.html>) manpage.
+
+   Here is an example configuration entry from the conserver.cf file
+that should illustrate the basics:
+
+     break 3 { string '"\d\z"'; delay 250; }
+
+     default ipmisol {
+       break 3;
+       motd "Generic IPMI SOL. Use \"Ctrl+E c ?\" for help, \"Ctrl+E c l 0 <key>\" for SysRq, \"Return [ ?\" for ipmi sol help";
+       username myusername;
+       type ipmi;
+     }
+
+     console node42 {
+       include ipmisol;
+       master conserver.example.com;
+       password mypassword;
+       host node42.bmc.example.com;
+     }
+
+
 File: freeipmi-faq.info,  Node: How do you setup Ganglia or Nagios to monitor IPMI sensors via FreeIPMI?,  Next: Why are times reported by FreeIPMI tools wrong?,  Prev: How do you setup Conman with ipmiconsole or libipmiconsole?,  Up: Top
 
-19 How do you setup Ganglia or Nagios to monitor IPMI sensors via FreeIPMI?
+20 How do you setup Ganglia or Nagios to monitor IPMI sensors via FreeIPMI?
 ===========================================================================
 
 Scripts to monitor IPMI via FreeIPMI in Ganglia and Nagios have been
@@ -734,7 +763,7 @@ for setup can be found at the top of the scripts.
 
 File: freeipmi-faq.info,  Node: Why are times reported by FreeIPMI tools wrong?,  Next: Why is the IPMI kernel driver faster than the KCS driver?,  Prev: How do you setup Ganglia or Nagios to monitor IPMI sensors via FreeIPMI?,  Up: Top
 
-20 Why are times reported by FreeIPMI tools wrong?
+21 Why are times reported by FreeIPMI tools wrong?
 ==================================================
 
 Times reported by various FreeIPMI tools (such as 'ipmi-sel') are
@@ -753,7 +782,7 @@ option can be specified in 'freeipmi.conf'.
 
 File: freeipmi-faq.info,  Node: Why is the IPMI kernel driver faster than the KCS driver?,  Next: Why is the output from FreeIPMI different than another software?,  Prev: Why are times reported by FreeIPMI tools wrong?,  Up: Top
 
-21 Why is the IPMI kernel driver faster than the KCS driver?
+22 Why is the IPMI kernel driver faster than the KCS driver?
 ============================================================
 
 Internally the IPMI kernel driver chooses to spin while polling for a
@@ -770,7 +799,7 @@ workaround.
 
 File: freeipmi-faq.info,  Node: Why is the output from FreeIPMI different than another software?,  Next: Why are there so many IPMI compliance bugs?,  Prev: Why is the IPMI kernel driver faster than the KCS driver?,  Up: Top
 
-22 Why is the output from FreeIPMI different than another software?
+23 Why is the output from FreeIPMI different than another software?
 ===================================================================
 
 Due to minor implementation differences and or incorrect IPMI firmware,
@@ -871,7 +900,7 @@ of the workarounds available to many of the FreeIPMI tools.
 
 File: freeipmi-faq.info,  Node: Why are there so many IPMI compliance bugs?,  Next: How do I get around an IPMI compliance bug on my motherboard?,  Prev: Why is the output from FreeIPMI different than another software?,  Up: Top
 
-23 Why are there so many IPMI compliance bugs?
+24 Why are there so many IPMI compliance bugs?
 ==============================================
 
 The IPMI specification is very large.  At last check, the IPMI
@@ -891,7 +920,7 @@ it on the website here:
 
 File: freeipmi-faq.info,  Node: How do I get around an IPMI compliance bug on my motherboard?,  Next: Why am I seeing so many 'internal IPMI error' or 'driver busy' messages?,  Prev: Why are there so many IPMI compliance bugs?,  Up: Top
 
-24 How do I get around an IPMI compliance bug on my motherboard?
+25 How do I get around an IPMI compliance bug on my motherboard?
 ================================================================
 
 Most of the FreeIPMI tools and libraries have flags to workaround a
@@ -906,7 +935,7 @@ has not yet been implemented, please contact the maintainers on the
 
 File: freeipmi-faq.info,  Node: Why am I seeing so many 'internal IPMI error' or 'driver busy' messages?,  Next: How do I program with the FreeIPMI libraries?,  Prev: How do I get around an IPMI compliance bug on my motherboard?,  Up: Top
 
-25 Why am I seeing so many 'internal IPMI error' or 'driver busy' messages?
+26 Why am I seeing so many 'internal IPMI error' or 'driver busy' messages?
 ===========================================================================
 
 In some Linux distributions (atleast with Redhat Enterprise Linux 6.4 /
@@ -964,7 +993,7 @@ mechanisms.  The following is from the Linux kernel documentation.
 
 File: freeipmi-faq.info,  Node: How do I program with the FreeIPMI libraries?,  Next: Where can I get additional help or support?,  Prev: Why am I seeing so many 'internal IPMI error' or 'driver busy' messages?,  Up: Top
 
-26 How do I program with the FreeIPMI libraries?
+27 How do I program with the FreeIPMI libraries?
 ================================================
 
 If you are looking for a high level library to do Serial-over-LAN (SOL)
@@ -990,7 +1019,7 @@ the website here:
 
 File: freeipmi-faq.info,  Node: Where can I get additional help or support?,  Prev: How do I program with the FreeIPMI libraries?,  Up: Top
 
-27 Where can I get additional help or support?
+28 Where can I get additional help or support?
 ==============================================
 
 For help, please email the <freeipmi-users@gnu.org> mailing list.
@@ -998,33 +1027,34 @@ For help, please email the <freeipmi-users@gnu.org> mailing list.
 
 
 Tag Table:
-Node: Top690
-Node: What is IPMI?2249
-Node: What is FreeIPMI?3391
-Node: How did FreeIPMI start?3924
-Node: What operating systems does FreeIPMI run on?5289
-Node: FreeIPMI vs OpenIPMI vs Ipmitool vs Ipmiutil6041
-Node: What is special about FreeIPMI?6846
-Node: Does my system support IPMI?13903
-Node: How do I compile FreeIPMI?15896
-Node: libgcrypt requirement16257
-Node: x86-64 Compilation16896
-Node: Installing FreeIPMI on FreeBSD17580
-Node: What are some IPMI terminology or acronyms I should be aware of?18220
-Node: What setup is needed for FreeIPMI to communicate over LAN?21245
-Node: What setup is needed for Serial over LAN (SOL) or Ipmiconsole?21837
-Node: Do I need to install or configure a driver to perform IPMI inband?23741
-Node: SSIF Driver Configuration25454
-Node: How do you setup Powerman with ipmipower?27050
-Node: How do you setup Conman with ipmiconsole or libipmiconsole?30340
-Node: How do you setup Ganglia or Nagios to monitor IPMI sensors via FreeIPMI?32344
-Node: Why are times reported by FreeIPMI tools wrong?32985
-Node: Why is the IPMI kernel driver faster than the KCS driver?33971
-Node: Why is the output from FreeIPMI different than another software?34971
-Node: Why are there so many IPMI compliance bugs?40366
-Node: How do I get around an IPMI compliance bug on my motherboard?41464
-Node: Why am I seeing so many 'internal IPMI error' or 'driver busy' messages?42277
-Node: How do I program with the FreeIPMI libraries?45403
-Node: Where can I get additional help or support?46746
+Node: Top687
+Node: What is IPMI?2298
+Node: What is FreeIPMI?3440
+Node: How did FreeIPMI start?3973
+Node: What operating systems does FreeIPMI run on?5338
+Node: FreeIPMI vs OpenIPMI vs Ipmitool vs Ipmiutil6090
+Node: What is special about FreeIPMI?6895
+Node: Does my system support IPMI?13952
+Node: How do I compile FreeIPMI?15945
+Node: libgcrypt requirement16306
+Node: x86-64 Compilation16945
+Node: Installing FreeIPMI on FreeBSD17629
+Node: What are some IPMI terminology or acronyms I should be aware of?18269
+Node: What setup is needed for FreeIPMI to communicate over LAN?21295
+Node: What setup is needed for Serial over LAN (SOL) or Ipmiconsole?21887
+Node: Do I need to install or configure a driver to perform IPMI inband?23791
+Node: SSIF Driver Configuration25504
+Node: How do you setup Powerman with ipmipower?27100
+Node: How do you setup Conman with ipmiconsole or libipmiconsole?30390
+Node: How do you setup Conserver with libipmiconsole?32369
+Node: How do you setup Ganglia or Nagios to monitor IPMI sensors via FreeIPMI?33355
+Node: Why are times reported by FreeIPMI tools wrong?33996
+Node: Why is the IPMI kernel driver faster than the KCS driver?34982
+Node: Why is the output from FreeIPMI different than another software?35982
+Node: Why are there so many IPMI compliance bugs?41377
+Node: How do I get around an IPMI compliance bug on my motherboard?42475
+Node: Why am I seeing so many 'internal IPMI error' or 'driver busy' messages?43288
+Node: How do I program with the FreeIPMI libraries?46414
+Node: Where can I get additional help or support?47757
 
 End Tag Table

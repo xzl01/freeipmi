@@ -1,18 +1,18 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT([freeipmi],[1.6.6],[freeipmi-devel@gnu.org])
+AC_INIT([freeipmi],[1.6.13],[freeipmi-devel@gnu.org])
 AC_REVISION([$Id: configure.ac,v 1.208 2010-08-06 21:02:29 chu11 Exp $])
 AC_CONFIG_MACRO_DIR([config])
 
 FREEIPMI_PACKAGE_VERSION_MAJOR=1
 FREEIPMI_PACKAGE_VERSION_MINOR=6
-FREEIPMI_PACKAGE_VERSION_PATCH=5
+FREEIPMI_PACKAGE_VERSION_PATCH=13
 
 AC_SUBST(FREEIPMI_PACKAGE_VERSION_MAJOR)
 AC_SUBST(FREEIPMI_PACKAGE_VERSION_MINOR)
 AC_SUBST(FREEIPMI_PACKAGE_VERSION_PATCH)
 
 dnl We require a modern autoconf and automake
-AC_PREREQ([2.57])
+AC_PREREQ([2.60])
 
 AC_CONFIG_AUX_DIR([config])
 
@@ -23,6 +23,8 @@ AM_INIT_AUTOMAKE([tar-ustar subdir-objects 1.9])
 
 dnl create a config.h file
 AC_CONFIG_HEADERS([config/config.h])
+
+X_AC_EXPAND_INSTALL_DIRS
 
 dnl define output files
 AC_CONFIG_FILES([
@@ -41,6 +43,15 @@ AC_CONFIG_FILES([
         contrib/Makefile
         doc/Makefile
         etc/Makefile
+        etc/bmc-watchdog.init
+        etc/bmc-watchdog.service
+        etc/ipmidetectd.init
+        etc/ipmidetectd.service
+        etc/ipmiseld.init
+        etc/ipmiseld.service
+        etc/os-shutdown-event.service
+        etc/os-startup-event.service
+        etc/set-sysinfo-in-bmc.service
         ipmi-chassis/Makefile
 	ipmi-config/Makefile
         ipmi-dcmi/Makefile
@@ -124,7 +135,7 @@ AC_SUBST([ISODATE])
 # release, then set age to 0.
 #
 LIBFREEIPMI_CURRENT=19
-LIBFREEIPMI_REVISION=5
+LIBFREEIPMI_REVISION=12
 LIBFREEIPMI_AGE=2
 
 LIBFREEIPMI_VERSION=$LIBFREEIPMI_CURRENT.$LIBFREEIPMI_REVISION.$LIBFREEIPMI_AGE
@@ -146,7 +157,7 @@ AC_SUBST([LIBFREEIPMI_VERSION_INFO])
 
 LIBFREEIPMI_VERSION_MAJOR=6
 LIBFREEIPMI_VERSION_MINOR=2
-LIBFREEIPMI_VERSION_PATCH=5
+LIBFREEIPMI_VERSION_PATCH=11
 
 AC_SUBST(LIBFREEIPMI_VERSION_MAJOR)
 AC_SUBST(LIBFREEIPMI_VERSION_MINOR)
@@ -208,7 +219,7 @@ AC_SUBST(LIBIPMICONSOLE_VERSION_PATCH)
 # release, then set age to 0.
 #
 LIBIPMIMONITORING_CURRENT=6
-LIBIPMIMONITORING_REVISION=8
+LIBIPMIMONITORING_REVISION=9
 LIBIPMIMONITORING_AGE=0
 LIBIPMIMONITORING_VERSION_INFO=$LIBIPMIMONITORING_CURRENT:$LIBIPMIMONITORING_REVISION:$LIBIPMIMONITORING_AGE
 AC_SUBST([LIBIPMIMONITORING_VERSION_INFO])
@@ -228,7 +239,7 @@ AC_SUBST([LIBIPMIMONITORING_VERSION_INFO])
 
 LIBIPMIMONITORING_VERSION_MAJOR=1
 LIBIPMIMONITORING_VERSION_MINOR=0
-LIBIPMIMONITORING_VERSION_PATCH=9
+LIBIPMIMONITORING_VERSION_PATCH=10
 
 AC_SUBST(LIBIPMIMONITORING_VERSION_MAJOR)
 AC_SUBST(LIBIPMIMONITORING_VERSION_MINOR)
@@ -293,6 +304,8 @@ AM_CONDITIONAL(WITH_GNU_LD, test "$with_gnu_ld" = "yes")
 AC_PROG_MAKE_SET
 AC_PROG_LN_S
 
+AC_USE_SYSTEM_EXTENSIONS
+
 dnl Enable error tracing. Lower level calls will spit error messages
 dnl on to the console
 AC_ARG_ENABLE([trace],
@@ -329,6 +342,10 @@ else
    WITH_DEBUG=0
 fi
 AC_SUBST(WITH_DEBUG)
+
+AC_ARG_ENABLE(doc,
+              AC_HELP_STRING([--disable-doc], [turn off documentation]))
+AM_CONDITIONAL(ENABLE_DOC, test "$enable_doc" != "no")
 
 dnl Allow advanced developers to compile with raw dumping
 AC_ARG_ENABLE(rawdumps,
@@ -394,9 +411,14 @@ fi
 dnl Checks for libraries.
 dnl don\'t include lib if LAN not desired
 if test x"${ac_with_encryption}" = xyes; then
-  AC_CHECK_LIB([gcrypt], [gcry_md_open], [have_gcrypt=yes], [have_gcrypt=no])
+  PKG_CHECK_MODULES([GCRYPT], [libgcrypt], [have_gcrypt=yes], [
+     AC_CHECK_LIB([gcrypt], [gcry_md_open],
+        [have_gcrypt=yes GCRYPT_LIBS=-lgcrypt],
+        [have_gcrypt=no])
+  ])
   if test "x${have_gcrypt}" = "xno"; then
-     AC_MSG_ERROR([libgcrypt required to build libfreeipmi])
+     AC_MSG_ERROR([libgcrypt required to build libfreeipmi with networking/encryption support])
+     AC_MSG_NOTICE([Note: If IPMI over a network is not required, you may consider building with --without-encryption.])
      AC_MSG_NOTICE([Note: libgpg-error required for libgcrypt])
   fi
   AC_CHECK_HEADERS([gcrypt.h], [have_gcrypt_header=yes], [have_gcrypt_header=no])
@@ -410,7 +432,6 @@ if test x"${ac_with_encryption}" = xyes; then
   if test "x${have_gcrypt_threads}" = "xno"; then
      AC_MSG_ERROR([libgcrypt with threads support required for libfreeipmi])
   fi
-  GCRYPT_LIBS=-lgcrypt
 fi
 AC_SUBST(GCRYPT_LIBS)
 
@@ -466,11 +487,31 @@ AC_CHECK_FUNCS([getline getprogname])
 AC_CHECK_FUNCS([strerror strerror_r])
 AC_CHECK_FUNCS([flockfile fputs_unlocked fwrite_unlocked])
 AC_CHECK_FUNCS([iopl])
+AC_CHECK_DECL([inb], [AC_DEFINE(HAVE_INB, [1], [Define to 1 if you have `inb' function.])], [], [
+#ifdef HAVE_SYS_IO_H
+#include <sys/io.h>
+#elif HAVE_ASM_IO_H
+#include <asm/io.h>
+#endif
+])
+AC_CHECK_DECL([outb], [AC_DEFINE(HAVE_OUTB, [1], [Define to 1 if you have `outb' function.])], [], [
+#ifdef HAVE_SYS_IO_H
+#include <sys/io.h>
+#elif HAVE_ASM_IO_H
+#include <asm/io.h>
+#endif
+])
 AC_CHECK_FUNCS([asprintf])
-AC_CHECK_FUNCS([cbrt])
+AC_CHECK_LIB([m], [cbrt], [AC_DEFINE(HAVE_CBRT, [1], [Define to 1 if you have `cbrt' function.])])
+AC_CHECK_FUNCS([getmsg putmsg])
+
+dnl inb and outb are inline asm in some linux systems
+AC_CHECK_DECLS([inb], [], [], [[#include <sys/io.h>]])
+AC_CHECK_DECLS([outb], [], [], [[#include <sys/io.h>]])
 
 dnl sighandler_t apparently not defined in Apple/OS X
-AC_CHECK_TYPES([sighandler_t], [], [], [[#include <signal.h>]])
+AC_CHECK_TYPES([sighandler_t], [], [], [[#define _GNU_SOURCE
+#include <signal.h>]])
 
 # At least on freebsd, putc_unlocked is a macro, so the standard
 # AC_CHECK_FUNCS doesn't work well.
@@ -479,9 +520,9 @@ AC_TRY_LINK([#include <stdio.h>],
             [AC_DEFINE_UNQUOTED(HAVE_PUTC_UNLOCKED, [1], [Define to 1 if you have putc_unlocked])])
 
 dnl FreeBSD has no exp10() nor log2(), FreeBSD < 5 has no exp2()
-AC_CHECK_LIB([m], [exp10])
-AC_CHECK_LIB([m], [exp2])
-AC_CHECK_LIB([m], [log2])
+AC_CHECK_LIB([m], [exp10], [AC_DEFINE(HAVE_EXP10, [1], [Define to 1 if you have `exp10' function.])])
+AC_CHECK_LIB([m], [exp2], [AC_DEFINE(HAVE_EXP2, [1], [Define to 1 if you have `exp2' function.])])
+AC_CHECK_LIB([m], [log2], [AC_DEFINE(HAVE_LOG2, [1], [Define to 1 if you have `log2' function.])])
 
 dnl Solaris needs -lsocket
 AC_CHECK_FUNC([socket],
@@ -672,7 +713,7 @@ fi
 
 AM_CONDITIONAL(WITH_FREEIPMI_ARGP, test "$have_argp" = "no")
 
-AC_TRY_COMPILE([#include <stdlib.h>],
+AC_TRY_COMPILE([#include <stdio.h>],
                [printf("%s\n", __FUNCTION__);],
                [AC_DEFINE([HAVE_FUNCTION_MACRO], [1], [Define is you have __FUNCTION__])])
 
@@ -757,5 +798,21 @@ else
 fi
 AM_CONDITIONAL(WITH_PKG_CONFIG, test -n "${pkgconfigdir}")
 AC_SUBST(pkgconfigdir)
+
+dnl Option for alternate system config dir
+
+AC_MSG_CHECKING(alternate system config dir)
+AC_ARG_WITH(systemconfigdir,
+	AS_HELP_STRING([--with-systemconfigdir=PATH],
+                       [where to install system config file]),
+                       [SYSTEMCONFIGDIR="${withval}"],
+                       [])
+if test -n "${SYSTEMCONFIGDIR}"; then
+	AC_MSG_RESULT(using ${SYSTEMCONFIGDIR})
+else
+	AC_MSG_RESULT(no)
+        SYSTEMCONFIGDIR="${X_SYSCONFDIR}/sysconfig"
+fi
+AC_SUBST(SYSTEMCONFIGDIR)
 
 AC_OUTPUT

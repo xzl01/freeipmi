@@ -40,6 +40,7 @@
 #include "freeipmi/record-format/ipmi-sdr-record-format.h"
 #include "freeipmi/spec/ipmi-channel-spec.h"
 #include "freeipmi/spec/ipmi-comp-code-spec.h"
+#include "freeipmi/spec/ipmi-ipmb-lun-spec.h"
 #include "freeipmi/spec/ipmi-slave-address-spec.h"
 #include "freeipmi/spec/ipmi-sensor-units-spec.h"
 #include "freeipmi/util/ipmi-sensor-and-event-code-tables-util.h"
@@ -256,7 +257,7 @@ _sensor_reading_corner_case_checks (ipmi_sensor_read_ctx_t ctx,
        * For some reason, some sensors can return this error code
        * (0xFF).  However, it appears to be an invalid error response
        * b/c the sensor properly reports that the sensor reading is
-       * not available or that scanning is diabled.  So if the sensor
+       * not available or that scanning is disabled.  So if the sensor
        * reports that it is unavailable, we'll report an error code
        * slightly more appropriate.
        *
@@ -563,7 +564,7 @@ ipmi_sensor_read (ipmi_sensor_read_ctx_t ctx,
    */
   if (!(ctx->flags & IPMI_SENSOR_READ_FLAGS_ASSUME_BMC_OWNER))
     {
-      if (slave_address == IPMI_SLAVE_ADDRESS_BMC)
+      if (slave_address == IPMI_SLAVE_ADDRESS_BMC && sensor_owner_lun == IPMI_BMC_IPMB_LUN_BMC)
         {
           if (_get_sensor_reading (ctx,
                                    sensor_number,

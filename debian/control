@@ -6,12 +6,13 @@ Uploaders: Bernd Zeimetz <bzed@debian.org>
 Build-Depends:
  chrpath,
  debhelper-compat (= 13),
+ dh-exec,
  libgcrypt20-dev,
- libsystemd-dev,
- pkg-config,
- systemd,
+ libsystemd-dev [linux-any],
+ pkgconf,
+ systemd-dev [linux-any],
  texinfo,
-Standards-Version: 4.5.1
+Standards-Version: 4.6.2
 Rules-Requires-Root: binary-targets
 Homepage: https://www.gnu.org/software/freeipmi/
 Vcs-Browser: https://salsa.debian.org/debian/freeipmi
@@ -53,6 +54,8 @@ Architecture: all
 Multi-Arch: foreign
 Depends: ${misc:Depends}
 Suggests: freeipmi-tools
+Breaks: libipmiconsole2 (<< 1.6.8-2~), libipmimonitoring6 (<< 1.6.8-2~)
+Replaces: libipmiconsole2 (<< 1.6.8-2~), libipmimonitoring6 (<< 1.6.8-2~)
 Description: GNU implementation of the IPMI protocol - common files
  FreeIPMI is a collection of Intelligent Platform Management IPMI
  system software. It provides in-band and out-of-band software and a
@@ -117,7 +120,7 @@ Description: GNU implementation of the IPMI protocol - tools
   * ipmi-sensors - display IPMI sensor information
   * ipmi-sensors-config - configure sensors
   * ipmiconsole - IPMI console utility
-  * ipmiping - send IPMI Get Authentication Capabilitiy request
+  * ipmiping - send IPMI Get Authentication Capability request
   * ipmipower - IPMI power control utility
   * pef-config - configure PEF values
   * rmcpping - send RMCP Ping to network hosts

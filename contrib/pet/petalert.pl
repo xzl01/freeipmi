@@ -46,7 +46,7 @@
 # - in case of no PTR, fallback to ip
 #
 # * Sun 06 Nov 2011 kaiwang.chen@gmail.com
-# - Inital version
+# - Initial version
 
 package IpmiPET::Perf;
 use Time::HiRes qw(tv_interval gettimeofday);
@@ -546,7 +546,7 @@ sub alert {
       eval {
         my $message = Net::SMTP->new($alert_opts{'server'}) || die "ERROR: can't talk to server $alert_opts{'server'}\n";
         $message->mail($alert_opts{'from'});
-        $message->to(@ARGV) || die "ERROR: failed to send to the recepients ",join(",",@ARGV),": $!";
+        $message->to(@ARGV) || die "ERROR: failed to send to the recipients ",join(",",@ARGV),": $!";
         $message->data();
         $message->datasend($data);
         $message->dataend();
@@ -708,7 +708,7 @@ sub process_args {
     print STDERR "petalert.pl is logging to $log_filename, use -q to suppress this tip\n";
   }
 
-  # comma-separted debug tokens
+  # comma-separated debug tokens
   if ($opts{'Debug'}) {
     $logger_token{$_} = 1 for split /,+/, $opts{'Debug'};
   }

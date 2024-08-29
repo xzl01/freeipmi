@@ -7,7 +7,6 @@ ipmi_fru_CPPFLAGS = \
 	-I$(top_srcdir)/common/portability \
 	-I$(top_builddir)/libfreeipmi/include \
 	-I$(top_srcdir)/libfreeipmi/include \
-	-D_GNU_SOURCE \
 	-D_REENTRANT
 
 ipmi_fru_LDADD = \
@@ -25,6 +24,8 @@ ipmi_fru_SOURCES = \
 	ipmi-fru-argp.h \
 	ipmi-fru-oem-wistron.c \
 	ipmi-fru-oem-wistron.h \
+	ipmi-fru-oem-xilinx.c \
+	ipmi-fru-oem-xilinx.h \
 	ipmi-fru-output.c \
 	ipmi-fru-output.h
 

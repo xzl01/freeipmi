@@ -29,6 +29,7 @@ extern "C" {
 #define IPMI_IANA_ENTERPRISE_ID_SUN_MICROSYSTEMS         42
 #define IPMI_IANA_ENTERPRISE_ID_INTEL                   343
 #define IPMI_IANA_ENTERPRISE_ID_DELL                    674
+#define IPMI_IANA_ENTERPRISE_ID_XILINX                 4314
 #define IPMI_IANA_ENTERPRISE_ID_MAGNUM_TECHNOLOGIES    5593
 #define IPMI_IANA_ENTERPRISE_ID_QUANTA                 7244
 #define IPMI_IANA_ENTERPRISE_ID_FUJITSU               10368
@@ -53,7 +54,7 @@ extern "C" {
    || (__iana_enterprise_id) == IPMI_IANA_ENTERPRISE_ID_SUPERMICRO_WORKAROUND)
 
 /* Some fields can be NULL if they were not assigned/removed by IANA */
-/* consider using ipmi_iana_enerprise_numbers_string() function to
+/* consider using ipmi_iana_enterprise_numbers_string() function to
  * handle some workaround situations this array will not have.
  */
 extern const char *const ipmi_iana_enterprise_numbers[];

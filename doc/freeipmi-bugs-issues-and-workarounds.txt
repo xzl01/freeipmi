@@ -119,7 +119,7 @@ LAN Authentication Issue #5: [COMPLIANCE]
   the Get Authentication Capabilities response.
 
   Seen on: Asus P5M2, Asus P5MT-R, Asus S162-E4, Asus RX4, Sun Fire
-  X4150, Sun Fire X4450, Intel SR1520ML, Intel X38ML
+  X4150, Sun Fire X4450, Intel SR1520ML, Intel X38ML, Vadatech VT811
 
   Resolution: Workaround option added to inform software to ignore
   flags in the Get Authentication Capabilities response.
@@ -299,7 +299,7 @@ LAN Authentication Issue #18: [COMPLIANCE]
 LAN Authentication Issue #19: [IMPLEMENTATION]
 
   When attempting to authenticate with a disabled Cipher Suite ID, a
-  0Ah status ("Unauthorized role or privelege level requested.") is
+  0Ah status ("Unauthorized role or privilege level requested.") is
   returned instead of 11h ("No Cipher Suite match with proposed
   security algorithms.").  The resulting error message is confusing.
 
@@ -390,6 +390,27 @@ LAN Authentication Issue #26: [COMPLIANCE]
 
   Resolution: Workaround added to ignore these invalid authentication
   codes.
+
+LAN Authentication Issue #27: [COMPLIANCE]
+
+  Cannot authenticate with IPMI 1.5, it is not supported.
+
+  Seen on: HP Proliant DL 145, Supermicro X11DPT-PS, Supermicro
+  X11DPU, Supermicro H11DSU-iN, Supermicro H12DSG-O-CPU.  But other
+  boards from these vendors have also been observed to have the
+  problem.
+
+  Resolution: User must specify they wish to use IPMI 2.0.
+
+LAN Authentication Issue #28: [IMPLEMENTATION]
+
+  Can only authenticate with Cipher Suite 17.  Error returned from
+  Open Session Response is 0x1 = "Insufficient resources to create a
+  session.", which is not the most useful error message.
+
+  Seen on: Intel M50CYP
+
+  Resolution: User must specify they wish to use Cipher Suite 17.
 
 ----------------------------------------------------------------------
 
@@ -882,7 +903,7 @@ Serial-Over-LAN Issue #20: [COMPLIANCE]
 
 Serial-Over-LAN Issue #21: [COMPLIANCE]
 
-  The BMC occassionally gets stuck and an increase in the SOL packet
+  The BMC occasionally gets stuck and an increase in the SOL packet
   sequence number is required to get the machine unstuck.
 
   Seen on: Intel Windmill, Quanta Winterfell, Wiwynn Windmill
@@ -1456,7 +1477,7 @@ Sensors Issue #8: [COMPLIANCE]
 
 Sensors Issue #9: [COMPLIANCE]
 
-  Sensor bridging over IPMI 1.5 fails b/c IPMB respones have invalid
+  Sensor bridging over IPMI 1.5 fails b/c IPMB response have invalid
   authentication codes.
 
   Seen on: Inventec 5441/Dell Xanadu II, Inventec 5442/Dell Xanadu III
@@ -1542,7 +1563,7 @@ Sensors Issue #15: [INTERPRETATION]
 
   IMO, a SDR record that indicates an analog reading w/ a discrete
   event/reading type code is illegal.  At the minimum it makes no
-  sense.  If you report an analog reading without any treshold
+  sense.  If you report an analog reading without any threshold
   information, what is the use?  While it is not explicitly stated in
   the IPMI specification, this is strongly implied to be wrong.  In
   42.1, it states for threshold sensors, "The Get Sensor Reading
@@ -1813,7 +1834,7 @@ DCMI Issue #3: [INTERPRETATION]
   Seen on: Various, this is a general issue.
 
   Resolution: Code assumes that all 64 bytes of the buffer must be
-  overwritten everytime the string is modified.  This seems to be the
+  overwritten every time the string is modified.  This seems to be the
   safest approach.
 
 DCMI Issue #4: [COMPLIANCE]

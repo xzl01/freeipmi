@@ -3,7 +3,7 @@
 #
 
 %define name freeipmi
-%define version 1.6.6
+%define version 1.6.13
 %if %{?_with_debug:1}%{!?_with_debug:0}
 %define release 1.debug%{?dist}
 %else
@@ -75,12 +75,17 @@ IPMI SEL syslog logging daemon.
   %define _with_systemdsystemunitdir --with-systemdsystemunitdir=%{_unitdir}
 %endif
 
+%if %{?_systemconfigdir:0}%{!?_systemconfigdir:1}
+  %define _systemconfigdir %{_sysconfdir}/sysconfig
+%endif
+
 %prep
 %setup -q
 
 %build
 %configure --program-prefix=%{?_program_prefix:%{_program_prefix}} \
 	   %{?_with_systemdsystemunitdir} \
+	   --with-systemconfigdir=%{_systemconfigdir} \
            %{?_enable_debug} --disable-static
 CFLAGS="$RPM_OPT_FLAGS" make %{?_smp_mflags}
 
@@ -89,7 +94,7 @@ rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT
 DESTDIR="$RPM_BUILD_ROOT" make install
 %if %{?_with_systemd:0}%{!?_with_systemd:1}
-# fix coherance problems with associated script filenames
+# fix coherence problems with associated script filenames
 mkdir -p $RPM_BUILD_ROOT/%{_initrddir}/
 # if check needed for SLES systems
 if [[ "%{_sysconfdir}/init.d" != "%{_initrddir}" ]]
@@ -99,6 +104,7 @@ mv $RPM_BUILD_ROOT/%{_sysconfdir}/init.d/ipmidetectd $RPM_BUILD_ROOT/%{_initrddi
 mv $RPM_BUILD_ROOT/%{_sysconfdir}/init.d/ipmiseld $RPM_BUILD_ROOT/%{_initrddir}/ipmiseld
 fi
 %endif
+mkdir -p $RPM_BUILD_ROOT/%{_systemconfigdir}/
 rm -f %{buildroot}%{_infodir}/dir
 # kludge to get around rpmlint complaining about 0 length semephore file
 echo freeipmi > %{buildroot}%{_localstatedir}/lib/freeipmi/ipckey
@@ -459,7 +465,7 @@ fi
 %else
 %config(noreplace) %{_initrddir}/bmc-watchdog
 %endif
-%config(noreplace) %{_sysconfdir}/sysconfig/bmc-watchdog
+%config(noreplace) %{_systemconfigdir}/bmc-watchdog
 %{_sbindir}/bmc-watchdog
 %{_mandir}/man8/bmc-watchdog.8*
 
@@ -491,6 +497,9 @@ fi
 %dir %{_localstatedir}/cache/ipmiseld
 
 %changelog
+* Wed May 28 2021 Albert Chu <chu11@llnl.gov> 1.7.0
+- Add _systemconfigdir definition
+
 * Wed Nov 4 2015 Albert Chu <chu11@llnl.gov> 1.5.0
 - Add systemd support.
 
@@ -520,7 +529,7 @@ fi
 - Support /etc/freeipmi/ config dir.
 - Support new ipmi_monitoring*.h files.
 - Support new manpages.
-- Support new compatability symlinks/manpages.
+- Support new compatibility symlinks/manpages.
 
 * Wed Sep 30 2009 Albert Chu <chu11@llnl.gov> 0.8.0
 - Update for dcmi.
@@ -564,7 +573,7 @@ fi
 - Obsolete old subpackage freeipmi-ipmimonitoring.
 
 * Tue Dec 18 2007 Albert Chu <chu11@llnl.gov> 0.6.0
-- Use %{version} instead of 1.6.6 for substitution in paths.
+- Use %{version} instead of 1.6.13 for substitution in paths.
 
 * Fri Dec 14 2007 Albert Chu <chu11@llnl.gov> 0.6.0
 - Update packaging for libfreeipmi reorganization

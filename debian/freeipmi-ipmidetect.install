@@ -1,5 +1,7 @@
+#!/usr/bin/dh-exec --with-scripts=filter-arch
 etc/freeipmi/ipmidetect*.conf
-lib/systemd/system/ipmidetectd.service
+[!linux-any] etc/init.d/ipmiseld
+[linux-any] ${env:systemdsystemunitdir}/ipmidetectd.service
 usr/sbin/ipmi-detect
 usr/sbin/ipmidetect
 usr/sbin/ipmidetectd

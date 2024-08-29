@@ -1,0 +1,52 @@
+From: Albert Chu <chu11@llnl.gov>
+Date: Sat, 27 Jan 2024 12:19:50 -0800
+Subject: configure.ac: Remove duplicate inb/outb declaration check.  Could
+ lead to broken builds on non-x86 systems.
+
+---
+ ChangeLog                            | 5 +++++
+ configure.ac                         | 4 ----
+ libfreeipmi/driver/ipmi-kcs-driver.c | 2 +-
+ 3 files changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 3e42f61..2b8e399 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,8 @@
++2024-01-27 Albert Chu <chu11@llnl.gov>
++
++	* configure.ac: Remove duplicate inb/outb declaration check.  Could
++	lead to broken builds on non-x86 systems.
++
+ 2024-01-25 Anonymous
+ 
+ 	* configure.ac: check for inb and outb declarations in header
+diff --git a/configure.ac b/configure.ac
+index f938716..2b06171 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -509,10 +509,6 @@ AC_CHECK_FUNCS([asprintf])
+ AC_CHECK_LIB([m], [cbrt], [AC_DEFINE(HAVE_CBRT, [1], [Define to 1 if you have `cbrt' function.])])
+ AC_CHECK_FUNCS([getmsg putmsg])
+ 
+-dnl inb and outb are inline asm in some linux systems
+-AC_CHECK_DECLS([inb], [], [], [[#include <sys/io.h>]])
+-AC_CHECK_DECLS([outb], [], [], [[#include <sys/io.h>]])
+-
+ dnl sighandler_t apparently not defined in Apple/OS X
+ AC_CHECK_TYPES([sighandler_t], [], [], [[#define _GNU_SOURCE
+ #include <signal.h>]])
+diff --git a/libfreeipmi/driver/ipmi-kcs-driver.c b/libfreeipmi/driver/ipmi-kcs-driver.c
+index 59a8b16..a9d4b2e 100644
+--- a/libfreeipmi/driver/ipmi-kcs-driver.c
++++ b/libfreeipmi/driver/ipmi-kcs-driver.c
+@@ -162,7 +162,7 @@
+ #if defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__)
+ # define _INB(port)  inb (port)
+ # define _OUTB(data, port)  outb (port, data)
+-#elif (defined(HAVE_INB) && defined(HAVE_OUTB)) || (defined(HAVE_DECL_INB) && defined(HAVE_DECL_OUTB))
++#elif defined(HAVE_INB) && defined(HAVE_OUTB)
+ # define _INB(port)  inb (port)
+ # define _OUTB(data, port)  outb (data, port)
+ #else

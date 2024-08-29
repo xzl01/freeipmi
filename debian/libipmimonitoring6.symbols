@@ -1,4 +1,5 @@
 libipmimonitoring.so.6 libipmimonitoring6 #MINVER#
+* Build-Depends-Package: libipmimonitoring-dev
  ipmi_monitoring_ctx_create@Base 1.1.5
  ipmi_monitoring_ctx_destroy@Base 1.1.5
  ipmi_monitoring_ctx_errnum@Base 1.1.5

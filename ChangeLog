@@ -1,3 +1,245 @@
+2024-01-25 Anonymous
+
+	* configure.ac: check for inb and outb declarations in header
+	files.
+
+2023-09-29 Albert Chu <chu11@llnl.gov>
+
+	* README: add rpm build notes
+
+2023-09-28 Albert Chu <chu11@llnl.gov>
+
+	* README: add some build notes / help.
+
+2023-09-05 Felip Moll <felip.moll@schedmd.com>
+
+	* libfreeipmi/driver/ipmi-openipmi-driver.c (_openipmi_read):
+	Convert from select() to poll() to avoid issues with high number
+	of open file descriptors when next fd > 1024. (GNU bug #64721).
+
+2023-09-05 Albert Chu <chu11@llnl.gov>
+
+	* ipmi-sensors: Fix help output typo.
+
+2023-09-05 MIYAZAKI Yasushi (on Savannah)
+
+	* configure.ac: Add define definitions for `exp10', `exp2', `log2'
+	to config.h.in.
+
+	* configure.ac: Add define definition for `cbrt' in math library
+	to config.h.in
+
+	* configure.ac: 'inb' and `outb' may be defined as inline
+	functions (ex. glibc 2.28 on debian buster (amd64)), so check with
+	AC_CHECK_DECL instead of AC_CHECK_FUNCS . Due to `Fix build issue
+	when inb/outb are not available on some systems' in 1.6.9 release,
+	the previously working kcs driver was causing errors.
+
+2023-09-05 Albert Chu <chu11@llnl.gov>
+
+	* man/ipmi-oem.8.pre.in: Document support on Supermicro X9DRD.
+
+2023-09-02 Albert Chu <chu11@llnl.gov>
+
+	* man/Makefile.am: Fix make distcheck.
+
+2023-09-02 Albert Chu <chu11@llnl.gov>
+
+	* man/ipmi-config.8.pre.in: Add pointer to ipmi-config.conf(5)
+	manpage so users know to look there.
+
+2023-07-18 Albert Chu <chu11@llnl.gov>
+
+	* common/portability/freeipmi-portability.h: Fix portability of
+	cbrt() redefinition.  cube root is x^(1/3) not x^-3.
+
+2023-06-22 Albert Chu <chu11@llnl.gov>
+
+	* doc/freeipmi-bugs-and-workarounds.txt: Document issue with
+	Vadatech VT811.
+
+2023-06-07 Albert Chu <chu11@llnl.gov>
+
+	* libfreeipmi/include: Add missing xilinx header to dist.
+
+2023-06-05 Albert Chu <chu11@llnl.gov>
+
+	* libipmimonitoring/ipmi_monitoring_sensor_reading.c
+	(_get_sensor_units): Handle special case when sensor has units
+	"RPM" and the units rate is "per minute".
+
+2023-05-15 Albert Chu <chu11@llnl.gov>
+
+	* doc, man: fix a number of typos
+
+	* global: Fix various comment / doc typos.
+
+	* contrib/pet/petalert.pl: Change output error message typo.
+
+2023-05-12 Albert Chu <chu11@llnl.gov>
+
+	* ipmiseld/ipmiseld-ipmi-communication.c (ipmiseld_ipmi_setup),
+	ipmiseld/ipmiseld-cache.c (ipmiseld_sdr_cache_create_and_load):
+	Set initialized pointers to NULL to avoid double free when
+	_ipmiseld_poll() exits.
+
+2022-11-08 Christian Kohn <chris.kohn@amd.com>
+
+	* libfreeipmi, ipmi-fru: Support xilinx OEM fru records.
+
+2022-11-08 Albert Chu <chu11@llnl.gov>
+
+	* libfreeipmi/include/freeipmi/spec/ipmi-iana-enterprise-numbers-spec.h:
+	Fix comment typo.
+
+2022-11-04 Sam James <sam@gentoo.org>
+
+	* configure.ac: Fix various portability to clang.
+
+2022-11-02 Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+	* configure.ac: support --disable-doc.
+
+2022-10-27 Albert Chu <chu11@llnl.gov>
+
+	* doc/freeipmi-bugs-and-workarounds.txt: Document issue with
+	Intel M50CYP.
+
+2022-10-26 Mert Kirpici <mert.kirpici@canonical.com>
+
+	* ipmi-sel: accept ISO 8601 for date range options.
+
+2022-10-06 Albert Chu <chu11@llnl.gov>
+
+	* doc/freeipmi-bugs-and-workarounds.txt: fix typo
+
+2022-09-19 Albert Chu <chu11@llnl.gov>
+
+	* configure.ac: Add extra build help.
+
+2022-09-06 Albert Chu <chu11@llnl.gov>
+
+	* common/portability/freeipmi-argp-fmtstream.h: Do not optimize under
+	cygwin, fixes portability issues.
+
+2022-02-17 Albert Chu <chu11@llnl.gov>
+
+	* ipmi-config/ipmi-config-category-core-sections.c
+	(ipmi_config_core_sections_create): Support IPV6 config in
+	Lan6_Conf section.
+
+	* ipmi-config/ipmi-config-category-core-lan6-conf-section.c:
+	Correct checkout of IPv6 dynamic addresses.
+
+	* ipmi-config/ipmi-config-category-core-lan6-conf-section.c: Do
+	not output all IPv6 addresses by default, only output them all in
+	verbose mode.
+
+	* ipmi-config/ipmi-config-category-core-lan6-conf-section.c
+	(ipv6_static_router_mac_address_checkout): Fix output corner case
+	due to error handling bug.
+
+	* libfreeipmi/cmds/ipmi-lan-cmds.c
+	(fill_cmd_set_lan_configuration_parameters_ipv6_static_addresses):
+	Fix invalid template check error.
+
+2022-02-14 Albert Chu <chu11@llnl.gov>
+
+	* man/ipmi-config.8.pre.in: Document additional board that
+	requires the `veryslowcommit` workaround.
+
+2022-01-25 Albert Chu <chu11@llnl.gov>
+
+	* man/ipmidetect.8.pre.in, man/ipmidetectd.8.pre.in: Correct out
+	of date command line options.
+
+2022-01-19 Albert Chu <chu11@llnl.gov>
+
+	* libfreeipmi/libcommon/ipmi-md2.h,
+	libfreeipmi/libcommon/ipmi-md2.c,
+	libfreeipmi/libcommon/ipmi-md5.h,
+	libfreeipmi/libcommon/ipmi-md5.c: Static compilation with
+	libfreeipmi can lead to problems if other software has similarly
+	named md2/md5 functions (such as md5_init()).  Prefix all macros
+	and functions with 'ipmi_' as needed.  Update all callers
+	accordingly.
+
+2022-01-18 Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+	* configure.ac: use pkg-config to find gcrypt
+
+2022-01-04 Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+	* configure.ac, libfreeipmi/driver/ipmi-kcs-driver.c: Check for
+	inb and outb before using them.
+
+2022-01-04 Fabien Wernli
+
+	* doc/freeipmi-faq.texi: Add conserver setup information.
+
+2021-11-01 Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+	* libfreeipmi/driver/ipmi-sunbmc-driver.c: musl doesn't provide
+	getmsg or putmsg even if stropts.h is available.  Do not compile
+	respective sections if get/putmsg are not available.
+
+2021-08-11 Robin Lee Powell <rlpowell@digitalkingdom.org>
+
+	* libipmiconsole: Document getty/agetty issue with serial
+	keepalive
+
+2021-05-28 Albert Chu <chu11@llnl.gov>
+
+	* configure.ac: Support --with-systemconfigdir option.
+
+2021-05-29 Heather Lemon <heather.lemon@canonical.com>
+
+	* libfreeipmi/sensor-read/ipmi-sensor-read.c: (LP#1926299)
+	Incorrect sensor reading reported.
+	BMC's that use a non-zero 'LUN' number (00b-10b)
+	will display an incorrect sensor temperature reading unless
+	otherwise specified via the ipmiV2.0 spec and must be accessed via LUN 00b.
+
+2021-03-27 Albert Chu <chu11@llnl.gov>
+
+	* etc: Generate many files via configure to ensure proper paths
+	are set.
+
+	* man/bmc-watchdog.8.pre.in: Remove legacy documentation.
+
+2021-02-10 Albert Chu <chu11@llnl.gov>
+
+	* libfreeipmi/fru/ipmi-fru-data.c: Fix invalid parsing of record
+	in ipmi_fru_multirecord_dc_load() and
+	ipmi_fru_multirecord_extended_dc_load().
+
+2021-02-07 Albert Chu <chu11@llnl.gov>
+
+	* libfreeipmi/fru/ipmi-fru.c: Do not require ipmi_ctx to be set if
+	loading data via buffer in ipmi_fru_open_device_id_with_buffer().
+
+	* ipmi-fru: Do not require opening of an IPMI session if using
+	--fru-file option.
+
+2021-02-07 Albert Chu <chu11@llnl.gov>
+
+	* etc/: Update conf file permissions.
+
+	* Globally fix a number of typos.
+
+2021-02-06 Fabio Fantoni <fantonifabio@tiscali.it>
+
+	* etc/: Update systemd service files permissions.
+
+2020-09-30 Albert Chu <chu11@llnl.gov>
+
+	* man/manpage-common-workaround-extra-text.man: Document that
+	Supermicro boards don't work with IPMI 1.5.
+	
+2020-09-21 Albert Chu <chu11@llnl.gov>
+
+	* man/ipmi-sel.8.pre.in: Fix typo
+
 2020-09-03 Christian Ehrhardt <christian.ehrhardt@canonical.com>
 
 	* libfreeipmi/locate/ipmi-locate-acpi-spmi.c

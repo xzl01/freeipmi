@@ -1,3 +1,113 @@
+freeipmi (1.6.13-3) unstable; urgency=medium
+
+  * d/patches/upstream: add 2 upstream fixes
+    - Ipmi-sel-add-missing-function-propotype.patch
+    - 0004-ipmi-sensors-fix-header-guard-definitions.patch
+  * d/patches/0005-add-missed-include-in-ipmi-sensors-oem-intel.c.patch
+    (Closes: #1066711)
+  * d/control: replace obsolete pkg-config with pkgconf in build-deps
+
+ -- Fabio Fantoni <fantonifabio@tiscali.it>  Mon, 25 Mar 2024 21:54:16 +0100
+
+freeipmi (1.6.13-2) unstable; urgency=medium
+
+  * d/patches/u: add Remove-duplicate-inb-outb-declaration-check.patch
+
+ -- Fabio Fantoni <fantonifabio@tiscali.it>  Sun, 28 Jan 2024 15:00:07 +0100
+
+freeipmi (1.6.13-1) unstable; urgency=medium
+
+  * New upstream version 1.6.13 (Closes: #1061547)
+  * d/control: Build-depends from systemd to systemd-dev (Closes: #1060491)
+
+ -- Fabio Fantoni <fantonifabio@tiscali.it>  Sat, 27 Jan 2024 15:27:14 +0100
+
+freeipmi (1.6.11-2) unstable; urgency=medium
+
+  [ Helmut Grohne ]
+  * Fix FTBFS when systemd.pc changes systemdsystemunitdir (Closes: #1052642)
+
+  [ Fabio Fantoni ]
+  * Fix some spelling errors in debian folder
+  * Remove unused lintian overrides
+  * d/gbp.conf: change debian-branch and upstream-branch to follow DEP14
+
+ -- Fabio Fantoni <fantonifabio@tiscali.it>  Fri, 17 Nov 2023 12:08:23 +0100
+
+freeipmi (1.6.11-1) unstable; urgency=medium
+
+  * New upstream version 1.6.11
+  * d/patches: remove one patch applied upstream
+
+ -- Fabio Fantoni <fantonifabio@tiscali.it>  Wed, 14 Jun 2023 13:17:42 +0200
+
+freeipmi (1.6.10-2) unstable; urgency=medium
+
+  * d/patches: add one upstream patch
+    Add initial support for Xilinx OEM FRU records (LP: #2019106)
+  * Bumped Standards-Version to 4.6.2, no needed changes
+
+ -- Fabio Fantoni <fantonifabio@tiscali.it>  Sun, 14 May 2023 12:09:29 +0200
+
+freeipmi (1.6.10-1) unstable; urgency=medium
+
+  * New upstream version 1.6.10
+  * d/patches: remove 6 patches applied upstream
+  * Bumped Standards-Version to 4.6.1, no needed changes
+  * Update lintian overrides
+  * Update symbols
+
+ -- Fabio Fantoni <fantonifabio@tiscali.it>  Sat, 03 Sep 2022 15:07:08 +0200
+
+freeipmi (1.6.9-2) unstable; urgency=medium
+
+  * d/rules: fix configure option for kfreebsd FTBFS (Closes: #998696)
+  * d/patches/enable-lan6-conf.patch: enable ipmi-config lan6_conf
+    section (LP: #1956213)
+  * d/patches: add some upstream fixes
+    - ipmi-config: Return int instead of uint8_t when a negative
+      value can be returned.  Cast to uint8_t when appropriate.
+    - ipmi-config: correct IPv6 dynamic address checkout error
+    - ipmi-config: do not output all IPv6 addresses by default,
+      only output them all in verbose mode.
+    - ipmi-config: fix output corner case due to missing error
+      handling
+    - libfreeipmi/cmds: fix invalid template check error
+
+ -- Fabio Fantoni <fantonifabio@tiscali.it>  Wed, 16 Feb 2022 20:46:59 +0100
+
+freeipmi (1.6.9-1) unstable; urgency=medium
+
+  * New upstream version 1.6.9
+  * Remove a patch applied upstream and refresh other
+
+ -- Fabio Fantoni <fantonifabio@tiscali.it>  Sun, 23 Jan 2022 13:02:11 +0100
+
+freeipmi (1.6.8-2) experimental; urgency=medium
+
+  * Don't build and install static libraries
+  * Install systemd files on linux-any
+  * Enable init scripts for kfreebsd only archs
+  * Multiarch path for libdir
+  * Move some arch-indip. files from shared libraries
+    packages to freeipmi-common
+
+ -- Fabio Fantoni <fantonifabio@tiscali.it>  Fri, 10 Dec 2021 12:41:24 +0100
+
+freeipmi (1.6.8-1) unstable; urgency=medium
+
+  * New upstream version 1.6.8
+  * d/rules: remove --with systemd on dh, is default
+  * Systemd build-deps only with linux kernel archs
+  * update debian/watch and add signature check
+  * d/patches:
+    - remove 2 patches applied in new upstream version
+    - replace custom patch about /etc/default with better
+      from upstream that set in configure
+  * add build-depends-package field in symbols files
+
+ -- Fabio Fantoni <fantonifabio@tiscali.it>  Thu, 09 Dec 2021 23:01:11 +0100
+
 freeipmi (1.6.6-5) unstable; urgency=medium
 
   * Fix .pc files path in -dev packages. Thanks to наб (Closes: #996325)
@@ -126,7 +236,7 @@ freeipmi (1.6.6-1) unstable; urgency=medium
     Replace man pages dates with the timestamp from the latest
     debian/changelog entry using the variable SOURCE_DATE_EPOCH to make the
     package build reproducibly.
-    I updated the patch that was not applycable anymore.
+    I updated the patch that was not applicable anymore.
     Thanks to Eduard Sanou (Closes: #794792)
   * [b921b64] Revert "Disable reprotest for now."
     This reverts commit 83bcf9c163ee9d2d9089961f556fc8afe60b501f.
@@ -431,7 +541,7 @@ freeipmi (0.8.12-3) unstable; urgency=low
 
   * Drop build-depend on libreadline since it is not used any longer
     (Closes: #634440). Thanks Lucas!
-  * Re-formated Build-Depends into mutliple lines
+  * Re-formated Build-Depends into multiple lines
 
  -- Yaroslav Halchenko <debian@onerussian.com>  Mon, 18 Jul 2011 19:29:26 -0400
 
